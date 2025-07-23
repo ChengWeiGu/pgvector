@@ -9,13 +9,13 @@ Here shows some simple steps to create local pg server and to use pgvector for v
   ```
   
 - PostgreSQL is built by docker-compose.yml on WSL, Ubuntu. Please follow the guidelines:   
-  1. Make sure you have installed wsl on Windows   
-
-    ```bash
-    wsl --install -d Ubuntu
-    wsl -l -v
-    wsl -d Ubuntu
-    ```
+  1. Make sure you have installed wsl on Windows
+     
+     ```bash
+     wsl --install -d Ubuntu
+     wsl -l -v
+     wsl -d Ubuntu
+     ```
 
   2. You have to open docker desktop and intergrate WSL:   
     Settings → Resources ▸ WSL Integration 勾選你的 distro   
