@@ -18,7 +18,10 @@ Here shows some simple steps to create local pg server and to use pgvector for v
      ```
 
   2. You have to open docker desktop and intergrate WSL:   
-    Settings → Resources ▸ WSL Integration 勾選你的 distro   
+     
+     ```markdown
+     Settings → Resources ▸ WSL Integration check distro   
+     ```
 
   3. Build project file for postgres   
 
