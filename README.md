@@ -11,13 +11,14 @@ Here shows some simple steps to create local pg server and to use pgvector for v
 - PostgreSQL is built by docker-compose.yml on WSL, Ubuntu. Please follow the guidelines:   
   1. Make sure you have installed wsl on Windows   
 
-  ```bash
-  wsl --install -d Ubuntu
-  wsl -l -v
-  wsl -d Ubuntu
-  ```
+    ```bash
+    wsl --install -d Ubuntu
+    wsl -l -v
+    wsl -d Ubuntu
+    ```
 
-  2. You have to open docker desktop and intergrate WSL (Settings → Resources ▸ WSL Integration 勾選你的 distro)   
+  2. You have to open docker desktop and intergrate WSL:   
+    Settings → Resources ▸ WSL Integration 勾選你的 distro   
 
   3. Build project file for postgres   
 
@@ -25,6 +26,7 @@ Here shows some simple steps to create local pg server and to use pgvector for v
      # build dir under Home
      cd ~
      mkdir ~/pgvector-demo && cd ~/pgvector-demo
+     
      # build compose file
      nano docker-compose.yml
      ```
@@ -38,10 +40,11 @@ Here shows some simple steps to create local pg server and to use pgvector for v
 
   5. Initializing pgvector with psql   
 
-     ```psql
+     ```bash
      # enter the container (pgvector-db), then connect to the db (retrieval_db) with the user (postgres)
      # your will get in the interface terminal allowing using psql CMD
      docker exec -it pgvector-db psql -U postgres -d retrieval_db
+     
      # In psql
      CREATE EXTENSION IF NOT EXISTS vector;
      \dx   -- 應列出 vector 代表成功
@@ -81,7 +84,7 @@ Here shows some simple steps to create local pg server and to use pgvector for v
 
 ## Preparation Work   
 In `config.ini`, please properly set azure endpoint, api version, api key, ...etc. before running ETL.   
-```txt
+```markdown
 endpoint=<your endpoint>
 api_key1=<your api_key1>
 api_key2=<your api_key2>
@@ -97,10 +100,9 @@ api_type=azure
 - Data1-JSSDK:   
 
   ```bash
+  # create a table named jssdk and convert data from web crawler into embedding
   python run_jssdk.py -t jssdk
   ```
-
-  Finally, you will see a table named `jssdk` created in your db.   
 
 - Data2-Datasheets:   
   TBD
