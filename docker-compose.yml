@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  db:
+    image: pgvector/pgvector:pg17        # 內建 pgvector 的官方映像檔 :contentReference[oaicite:0]{index=0}
+    container_name: pgvector-db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: retrieval_db          # 先幫你建立一個 DB
+
+    ports:
+      - "5432:5432"                      # 暴露給 Windows 的 pgAdmin
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # 永久化資料
+
+volumes:
+  pgdata:
+

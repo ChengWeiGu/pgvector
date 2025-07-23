@@ -1,0 +1,18 @@
+Ctrl+K 剪下整列或選取範圍
+Alt+6 複製整列或選取範圍
+Ctrl+6 開始選取
+Ctrl+U 貼上剪貼簿內容
+Alt+U Undo
+Alt+E Redo
+Alt+Del 刪除整行
+Alt+3 Comment/Uncomment
+Alt+/ || Alt+G 跳到指定行數
+Ctrl+G Help
+Alt+W || F6 尋找
+Alt+Q 尋找下一個
+Alt+W 尋找上一個
+Alt+R 尋找並置換
+Alt+X 關閉下方 Help 提示
+Ctrl+S 存檔
+Ctrl+O 另存新檔
+Ctrl+X 退出
