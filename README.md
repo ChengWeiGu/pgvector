@@ -45,7 +45,7 @@ Here shows some simple steps to create local pg server and to use pgvector for v
 
      ```bash
      # enter the container (pgvector-db), then connect to the db (retrieval_db) with the user (postgres)
-     # your will get in the interface terminal allowing using psql CMD
+     # next, you will enter the interface terminal that enable you to use psql CMD
      docker exec -it pgvector-db psql -U postgres -d retrieval_db
      
      # In psql
