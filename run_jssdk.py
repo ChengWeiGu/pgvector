@@ -88,46 +88,52 @@ class JsSDKScanner:
         
         print("start scaning....")
         total_chunk_cnt = 0
+        fail_list = []
         # 掃描所有 url進行網頁爬蟲
         for i, metadata in tqdm(enumerate(self.metadatas), 
                             total=len(self.metadatas), 
                             desc = "Processing JS Object URLs ", 
                             unit="url"):
-            # 網站爬蟲抓取文字資料
-            url = metadata["url"]
-            resp = requests.get(url)
-            encoding = chardet.detect(resp.content)['encoding']
-            resp.encoding = encoding
-            soup = BeautifulSoup(resp.text, 'html.parser')
-            content_texts = soup.get_text()
-            # remove each suffix
-            for replace in self.remove_text_list:
-                content_texts = content_texts.replace(replace,"")
-            # 處理metadata格式以便插入pg, 外掛 chunk_context and embedding
-            data_keys = list(metadata.keys()) + ["chunk_context","embedding"]
-            col_names = ", ".join(data_keys)
-            
-            # 文字切割並轉換為Embedding、存入PG
-            for chunk in text_splitter_recur.split_text(content_texts):
-                # 加入 chunk_context
-                data_values = list(metadata.values())
-                data_values.append(chunk)
-                # 轉換Embedding, 失敗試三次
-                for _ in range(3):
-                    chunk_embedding = az_embed.get_embedding(chunk)
-                    if chunk_embedding is not None:
-                        data_values.append(chunk_embedding)
-                        break
-                    else:
-                        time.sleep(10)
-                # 存入pg
-                data_values = [tuple(data_values)]
-                pg_vector.upsert_data(self.table_name, 
-                                      col_names, 
-                                      data_values)
-                total_chunk_cnt += 1
-        
+            try:
+                # 網站爬蟲抓取文字資料
+                url = metadata["url"]
+                resp = requests.get(url)
+                encoding = chardet.detect(resp.content)['encoding']
+                resp.encoding = encoding
+                soup = BeautifulSoup(resp.text, 'html.parser')
+                content_texts = soup.get_text()
+                # remove each suffix
+                for replace in self.remove_text_list:
+                    content_texts = content_texts.replace(replace,"")
+                # 處理metadata格式以便插入pg, 外掛 chunk_context and embedding
+                data_keys = list(metadata.keys()) + ["chunk_context","embedding"]
+                col_names = ", ".join(data_keys)
+                
+                # 文字切割並轉換為Embedding、存入PG
+                for chunk in text_splitter_recur.split_text(content_texts):
+                    # 加入 chunk_context
+                    data_values = list(metadata.values())
+                    data_values.append(chunk)
+                    # 轉換Embedding, 失敗試三次
+                    for _ in range(3):
+                        chunk_embedding = az_embed.get_embedding(chunk)
+                        if chunk_embedding is not None:
+                            data_values.append(chunk_embedding)
+                            # 存入pg
+                            data_values = [tuple(data_values)]
+                            pg_vector.upsert_data(self.table_name, 
+                                                col_names, 
+                                                data_values)
+                            total_chunk_cnt += 1
+                            break
+                        else:
+                            time.sleep(10)
+            except Exception as e:
+                fail_list.append((metadata["url"], str(e)))
+                
+                
         print("total len of chunks: ",total_chunk_cnt)
+        print("fail list:\n",fail_list)
 
 
 def main():
@@ -136,16 +142,20 @@ def main():
     parser.add_argument('-t','--table_name', default="jssdk", type=str,help='創建Postgres Table名稱存入jssdk')
     args = parser.parse_args()
     
+    table_name = args.table_name
+    if table_name.strip() == "":
+        print("table_name is empty")
+        return
     
-    print(f"Create table {args.table_name} if not exists....")
-    ret_json = pg_vector.create_jssdk_table(table_name=args.table_name)
+    print(f"Create table '{table_name}' if not exists....")
+    ret_json = pg_vector.create_jssdk_table(table_name=table_name)
     if ret_json["status"] == "fail":
         print(ret_json["error_reason"])
         return
     
     
     print("start creating documents....")
-    scanner = JsSDKScanner()
+    scanner = JsSDKScanner(table_name=table_name)
     scanner.scan_web_and_create_embed2pg()
     print("done")
 

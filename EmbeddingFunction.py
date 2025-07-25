@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import tiktoken
 import configparser
 import openai
 from openai import AzureOpenAI, OpenAIError
@@ -7,6 +8,31 @@ from openai import AzureOpenAI, OpenAIError
 
 config=configparser.ConfigParser()
 config.read("Config.ini")
+
+
+'''Token Calculator for LLM
+* @params: text - string of text, model_name - model name
+* @return: number of tokens
+**'''
+def num_tokens_from_string_llm(text: str, model_name: str = "gpt-4o") -> int:
+    """Returns the number of tokens in a text string."""
+    encoding = tiktoken.encoding_for_model(model_name)
+    tokens = encoding.encode(text)
+    num_tokens = len(tokens)
+    return num_tokens
+
+
+'''Token Calculator for Embedding
+* @params: text - string of text, encoding_name - model encoding name
+* @return: number of tokens
+* cl100k_base for  hird-generation embedding models like text-embedding-3-small
+**'''
+def num_tokens_from_string_embed(string: str, encoding_name: str="cl100k_base") -> int:
+    """Returns the number of tokens in a text string."""
+    encoding = tiktoken.get_encoding(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens
+
 
 
 ## default az setting
@@ -54,3 +80,10 @@ if __name__ == "__main__":
         print(f"Embedding: {embedding}\n=>Total length of embedding: {len(embedding)}")
     else:
         print("Failed to get embedding.")
+        
+    
+    # num_tokens = num_tokens_from_string_llm("這是一段測試文字，用於計算 LLM token 的數量。")
+    # print(f"Number of tokens: {num_tokens}")
+    
+    # num_tokens = num_tokens_from_string_embed("這是一段測試文字，用於計算 embedding token 的數量。")
+    # print(f"Number of tokens: {num_tokens}")
