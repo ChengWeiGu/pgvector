@@ -99,19 +99,19 @@ embed_dim=3072
 api_type=azure
 ```
   
-## ETL Scripts   
-- Data1-JSSDK:   
+## ETL Scripts    
+Please run the following scripts to prepare vector table for each data scope   
 
   ```bash
-  # create a table named jssdk and convert data from web crawler into embedding
+  # JSSDK ETL: create a table named 'jssdk' and convert data from web crawler into embedding
   python run_jssdk.py -t jssdk
+
+  # SPEC ETL: create a table named 'spec' and convert file into embedding from folder 'SVN_datasheet'
+  python run_spec.py -t spec -s "./SVN_datasheet"
+
+  # MANUAL ETL: create a table named 'manual' and convert file into embedding from folder 'SVN_manual'
+  TBD...
   ```
-
-- Data2-Datasheets:   
-  TBD
-
-- Data3-Manuals:   
-  TBD
 
 ## Inference   
 To use each chroma db for vector search, please run   
