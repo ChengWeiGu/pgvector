@@ -7,9 +7,7 @@ import requests
 from tqdm import tqdm
 import DatabaseProcess
 import EmbeddingFunction
-from os.path import exists
 from bs4 import BeautifulSoup
-from langchain.docstore.document import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 

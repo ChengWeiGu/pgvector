@@ -7,8 +7,6 @@ import argparse
 from tqdm import tqdm
 import DatabaseProcess
 import EmbeddingFunction
-from os.path import exists
-from langchain.docstore.document import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 

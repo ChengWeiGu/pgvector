@@ -31,6 +31,9 @@ if __name__ == '__main__':
         *'''
         # query = "How to use mouse event in JS Object?"
         query = args.js
+        if query.strip() == "":
+            print("query is empty")
+            exit()
         # conver query into embedding
         time_period_js_start_time = time.time()
         query_embedding = az_embed.get_embedding(query)
@@ -49,6 +52,9 @@ if __name__ == '__main__':
         * 2. 組合並獲取 Working Context
         *'''
         query = args.spec
+        if query.strip() == "":
+            print("query is empty")
+            exit()
         # conver query into embedding
         time_period_spec_start_time = time.time()
         query_embedding = az_embed.get_embedding(query)
@@ -59,3 +65,25 @@ if __name__ == '__main__':
         working_context = "\n".join([segment + "\n" + "HMI model: " + res['model'] + "\n"+ res['chunk_context'] for res in results])
         print(working_context)
         print(f"\nspec vector search time: {time_period_spec_end_time - time_period_spec_start_time} sec")
+        
+    
+    if (not args.js) and (not args.spec) and args.manual:
+        '''**
+        * manual object demo
+        * 1. convert text to embedding
+        * 2. 組合並獲取 Working Context
+        *'''
+        query = args.manual
+        if query.strip() == "":
+            print("query is empty")
+            exit()
+        # conver query into embedding
+        time_period_manual_start_time = time.time()
+        query_embedding = az_embed.get_embedding(query)
+        # vector search
+        results = pg_vector.query_manual_nearest(vec=query_embedding, top_k=10)
+        time_period_manual_end_time = time.time()
+        # working context for LLM later
+        working_context = "\n".join([segment + "\n" + "Source: " + res['source'] + "\n"+ "Document Content: \n" + res['chunk_context'] for res in results])
+        print(working_context)
+        print(f"\nspec vector search time: {time_period_manual_end_time - time_period_manual_start_time} sec")
