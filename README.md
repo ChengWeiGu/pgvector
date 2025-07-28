@@ -110,11 +110,11 @@ Please run the following scripts to prepare vector table for each data scope
   python run_spec.py -t spec -s "./SVN_datasheet"
 
   # MANUAL ETL: create a table named 'manual' and convert file into embedding from folder 'SVN_manual'
-  TBD...
+  python run_manual.py -t manual -s "./SVN_manual"
   ```
 
 ## Inference   
-To use each chroma db for vector search, please run   
+To use each table for vector search, please run   
 ```bash
 python run_inference.py <flag> <query>
 ```
@@ -124,7 +124,7 @@ Where `<flag>` is one of
 `-s`: vector search on datasheets scope   
 `-m`: vector search on manual scope   
 
-and `<query>` is any question you want to ask.   
+and `<query>`, not empty, is any question you want to ask.   
 
 Try the following examples:   
 
