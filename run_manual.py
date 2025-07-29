@@ -310,19 +310,19 @@ def main():
     table_name = args.table_name
     if table_name.strip() == "":
         print("table_name is empty")
-        return
+        exit()
     
     directory = args.src
     if directory.strip() == "":
         print("directory is empty")
-        return
+        exit()
     
     
     print(f"Create table '{table_name}' if not exists....")
     ret_json = pg_vector.create_manual_table(table_name=table_name)
     if ret_json["status"] == "fail":
         print(ret_json["error_reason"])
-        return
+        exit()
     
     print("start creating manual documents....")
     

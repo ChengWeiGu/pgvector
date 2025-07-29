@@ -12,7 +12,7 @@ langchain-text-splitters==0.2.2
 langdetect==1.0.9
 langsmith==0.1.93
 numpy==1.26.3
-openai==1.37.0
+openai==1.97.1
 openpyxl==3.1.2
 pandas==2.1.4
 tqdm==4.66.1
