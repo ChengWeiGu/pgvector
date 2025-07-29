@@ -86,4 +86,4 @@ if __name__ == '__main__':
         # working context for LLM later
         working_context = "\n".join([segment + "\n" + "Source: " + res['source'] + "\n"+ "Document Content: \n" + res['chunk_context'] for res in results])
         print(working_context)
-        print(f"\nspec vector search time: {time_period_manual_end_time - time_period_manual_start_time} sec")
+        print(f"\nmanual vector search time: {time_period_manual_end_time - time_period_manual_start_time} sec")
